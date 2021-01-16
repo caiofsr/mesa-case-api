@@ -4,7 +4,7 @@ export default class Ratings extends BaseSchema {
   protected tableName = 'ratings'
 
   public async up() {
-    this.schema.createTable(this.tableName, (table) => {
+    this.schema.createTable(this.tableName, table => {
       table.increments('id')
       table.uuid('external_id').unique().notNullable()
       table
@@ -18,7 +18,7 @@ export default class Ratings extends BaseSchema {
         .integer('spot_id')
         .unsigned()
         .references('id')
-        .inTable('users')
+        .inTable('spots')
         .onUpdate('CASCADE')
         .onDelete('CASCADE')
       table.text('comment').nullable()

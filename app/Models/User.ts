@@ -1,7 +1,16 @@
 import { DateTime } from 'luxon'
 import Hash from '@ioc:Adonis/Core/Hash'
 import { v4 as uuid } from 'uuid'
-import { column, beforeSave, BaseModel, beforeCreate } from '@ioc:Adonis/Lucid/Orm'
+import {
+  column,
+  beforeSave,
+  BaseModel,
+  beforeCreate,
+  hasMany,
+  HasMany,
+} from '@ioc:Adonis/Lucid/Orm'
+import Spot from 'App/Models/Spot'
+import Rating from 'App/Models/Rating'
 
 export default class User extends BaseModel {
   @column({ isPrimary: true, serializeAs: null })
@@ -9,6 +18,12 @@ export default class User extends BaseModel {
 
   @column({ columnName: 'external_id' })
   public externalId: string
+
+  @column({ columnName: 'first_name' })
+  public firstName: string
+
+  @column({ columnName: 'last_name' })
+  public lastName: string
 
   @column()
   public email: string
@@ -36,4 +51,10 @@ export default class User extends BaseModel {
   public static createExternalId(user: User) {
     user.externalId = uuid()
   }
+
+  @hasMany(() => Spot)
+  public spots: HasMany<typeof Spot>
+
+  @hasMany(() => Rating)
+  public ratings: HasMany<typeof Rating>
 }
