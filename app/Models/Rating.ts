@@ -1,6 +1,8 @@
 import { DateTime } from 'luxon'
-import { BaseModel, beforeCreate, column } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, beforeCreate, BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
 import { v4 as uuid } from 'uuid'
+import User from 'App/Models/User'
+import Spot from 'App/Models/Spot'
 
 export default class Rating extends BaseModel {
   @column({ isPrimary: true, serializeAs: null })
@@ -31,4 +33,10 @@ export default class Rating extends BaseModel {
   public static createExternalId(rating: Rating) {
     rating.externalId = uuid()
   }
+
+  @belongsTo(() => User)
+  public user: BelongsTo<typeof User>
+
+  @belongsTo(() => Spot)
+  public spot: BelongsTo<typeof Spot>
 }

@@ -1,7 +1,16 @@
 import { DateTime } from 'luxon'
 import Hash from '@ioc:Adonis/Core/Hash'
 import { v4 as uuid } from 'uuid'
-import { column, beforeSave, BaseModel, beforeCreate } from '@ioc:Adonis/Lucid/Orm'
+import {
+  column,
+  beforeSave,
+  BaseModel,
+  beforeCreate,
+  hasMany,
+  HasMany,
+} from '@ioc:Adonis/Lucid/Orm'
+import Spot from './Spot'
+import Rating from './Rating'
 
 export default class User extends BaseModel {
   @column({ isPrimary: true, serializeAs: null })
@@ -30,6 +39,12 @@ export default class User extends BaseModel {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
+
+  @hasMany(() => Spot)
+  public spots: HasMany<typeof Spot>
+
+  @hasMany(() => Rating)
+  public ratings: HasMany<typeof Rating>
 
   @beforeSave()
   public static async hashPassword(user: User) {
