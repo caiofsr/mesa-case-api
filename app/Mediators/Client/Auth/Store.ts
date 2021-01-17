@@ -8,7 +8,7 @@ const Store = async ({ firstName, lastName, email, password }: User) => {
 
     return { status: 201, data: user }
   } else {
-    return { status: 400, data: { error: 'Email já em uso' } }
+    return { status: 400, data: { error: 'Email already in use' } }
   }
 }
 

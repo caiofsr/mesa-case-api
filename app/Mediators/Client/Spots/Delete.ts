@@ -12,7 +12,7 @@ const Delete = async (externalId: string, auth: AuthContract) => {
 
     return { status: 204 }
   } catch (error) {
-    return { status: 400, data: { error: 'Não foi possível remover o local' } }
+    return { status: 400, data: { error: "Couldn't remove spot" } }
   }
 }
 

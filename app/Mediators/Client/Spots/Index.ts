@@ -16,6 +16,7 @@ const Index = async ({ own, list, distance, page, latitude, longitude }, auth: A
           .preload('ratings')
           .orderBy('name')
           .paginate(page, limit)
+
         return { status: 200, data: spots }
       } else {
         const spots = await Spot.query()
@@ -51,7 +52,7 @@ const Index = async ({ own, list, distance, page, latitude, longitude }, auth: A
     }
   } catch (error) {
     Logger.error(error)
-    return { status: 400, data: { error: 'Não foi possível buscar os locais' } }
+    return { status: 400, data: { error: "Couldn't search the spots" } }
   }
 }
 

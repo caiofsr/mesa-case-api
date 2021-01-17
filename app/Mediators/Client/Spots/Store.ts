@@ -9,7 +9,7 @@ const Store = async ({ name, latitude, longitude }: Spot, auth: AuthContract) =>
 
     return { status: 201, data: spot }
   } catch (error) {
-    return { status: 400, data: { error: 'Não foi possível inserir um novo local' } }
+    return { status: 400, data: { error: "Couldn't register a new spot" } }
   }
 }
 

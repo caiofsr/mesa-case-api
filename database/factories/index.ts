@@ -24,6 +24,9 @@ export const SpotFactory = Factory.define(Spot, ({ faker }) => {
     longitude: parseFloat(faker.address.longitude()),
   }
 })
+  .before('makeStubbed', (_, model) => {
+    model.id = Math.floor(Math.random() * (100 - 50) + 50)
+  })
   .relation('user', () => UserFactory)
   .relation('ratings', () => RatingFactory)
   .build()

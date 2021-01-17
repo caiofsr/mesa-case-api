@@ -1,6 +1,8 @@
 import test from 'japa'
 import supertest from 'supertest'
 
+import { UserFactory, SpotFactory } from 'Database/factories'
+
 const BASE_URL = `http://${process.env.HOST}:${process.env.PORT}`
 const spotsUrl = '/v1/client/spots'
 const authUrl = '/v1/client/auth'
@@ -8,218 +10,178 @@ let spotId = ''
 
 test.group('Spots', () => {
   test('ensure a user authenticated create a new spot', async assert => {
+    const user = await UserFactory.makeStubbed()
+    const {
+      $attributes: { name, latitude, longitude },
+    } = await SpotFactory.makeStubbed()
+
+    const { email, password } = user
+
     const payload = {
-      name: 'Casa da mãe Joana',
-      latitude: 1,
-      longitude: 1,
+      name,
+      latitude,
+      longitude,
     }
 
     const authentication = {
-      email: 'caiosfr13@gmail.com',
-      password: 'Ronaldo123',
+      email,
+      password,
     }
+
+    await user.save()
 
     const {
       body: { token },
     } = await supertest(BASE_URL).post(`${authUrl}/signin`).send(authentication).expect(201)
 
-    {
-      const { body } = await supertest(BASE_URL)
-        .post(`${spotsUrl}/new`)
-        .set('Authorization', `Bearer ${token}`)
-        .send(payload)
-        .expect(201)
+    const { body } = await supertest(BASE_URL)
+      .post(`${spotsUrl}/new`)
+      .set('Authorization', `Bearer ${token}`)
+      .send(payload)
+      .expect(201)
 
-      await supertest(BASE_URL)
-        .post(`${spotsUrl}/new`)
-        .set('Authorization', `Bearer ${token}`)
-        .send(payload)
-        .expect(201)
-
-      await supertest(BASE_URL)
-        .post(`${spotsUrl}/new`)
-        .set('Authorization', `Bearer ${token}`)
-        .send(payload)
-        .expect(201)
-
-      await supertest(BASE_URL)
-        .post(`${spotsUrl}/new`)
-        .set('Authorization', `Bearer ${token}`)
-        .send(payload)
-        .expect(201)
-
-      await supertest(BASE_URL)
-        .post(`${spotsUrl}/new`)
-        .set('Authorization', `Bearer ${token}`)
-        .send(payload)
-        .expect(201)
-
-      await supertest(BASE_URL)
-        .post(`${spotsUrl}/new`)
-        .set('Authorization', `Bearer ${token}`)
-        .send(payload)
-        .expect(201)
-
-      await supertest(BASE_URL)
-        .post(`${spotsUrl}/new`)
-        .set('Authorization', `Bearer ${token}`)
-        .send(payload)
-        .expect(201)
-
-      await supertest(BASE_URL)
-        .post(`${spotsUrl}/new`)
-        .set('Authorization', `Bearer ${token}`)
-        .send(payload)
-        .expect(201)
-
-      await supertest(BASE_URL)
-        .post(`${spotsUrl}/new`)
-        .set('Authorization', `Bearer ${token}`)
-        .send(payload)
-        .expect(201)
-
-      await supertest(BASE_URL)
-        .post(`${spotsUrl}/new`)
-        .set('Authorization', `Bearer ${token}`)
-        .send(payload)
-        .expect(201)
-
-      assert.include(body, payload)
-    }
+    assert.include(body, payload)
   })
 
-  test('ensure that a user can index his own spots in list', async assert => {
+  test('ensure that a user can index all spots in list', async assert => {
+    const user = await UserFactory.makeStubbed()
+
+    const { email, password } = user
+
     const authentication = {
-      email: 'caiosfr13@gmail.com',
-      password: 'Ronaldo123',
+      email,
+      password,
     }
+
+    await user.save()
 
     const {
       body: { token },
     } = await supertest(BASE_URL).post(`${authUrl}/signin`).send(authentication).expect(201)
+
+    await SpotFactory.createMany(10)
 
     const {
       body: { data },
     } = await supertest(BASE_URL)
-      .get(`${spotsUrl}/index?own=true&list=true&page=1`)
+      .get(`${spotsUrl}/index?list=true&page=1`)
       .set('Authorization', `Bearer ${token}`)
       .expect(200)
 
     assert.isArray(data)
     assert.lengthOf(data, 10)
   })
-})
 
-test('ensure that a user can index his own spots in range', async assert => {
-  const authentication = {
-    email: 'caiosfr13@gmail.com',
-    password: 'Ronaldo123',
-  }
+  test('ensure that a user can index all spots in range', async assert => {
+    const user = await UserFactory.makeStubbed()
 
-  const {
-    body: { token },
-  } = await supertest(BASE_URL).post(`${authUrl}/signin`).send(authentication).expect(201)
+    const { email, password } = user
 
-  const {
-    body: { data },
-  } = await supertest(BASE_URL)
-    .get(`${spotsUrl}/index?own=true&latitude=1&longitude=1&distance=1&page=1`)
-    .set('Authorization', `Bearer ${token}`)
-    .expect(200)
+    const authentication = {
+      email,
+      password,
+    }
 
-  spotId = data[0].external_id
+    await user.save()
 
-  assert.isArray(data)
-  assert.lengthOf(data, 10)
-})
+    const {
+      body: { token },
+    } = await supertest(BASE_URL).post(`${authUrl}/signin`).send(authentication).expect(201)
 
-test('ensure that a user can index all spots in list', async assert => {
-  const authentication = {
-    email: 'caiosfr13@gmail.com',
-    password: 'Ronaldo123',
-  }
+    const { latitude, longitude } = await SpotFactory.create()
 
-  const {
-    body: { token },
-  } = await supertest(BASE_URL).post(`${authUrl}/signin`).send(authentication).expect(201)
+    const {
+      body: { data },
+    } = await supertest(BASE_URL)
+      .get(`${spotsUrl}/index?latitude=${latitude}&longitude=${longitude}&distance=1&page=1`)
+      .set('Authorization', `Bearer ${token}`)
+      .expect(200)
 
-  const {
-    body: { data },
-  } = await supertest(BASE_URL)
-    .get(`${spotsUrl}/index?list=true&page=1`)
-    .set('Authorization', `Bearer ${token}`)
-    .expect(200)
+    assert.isArray(data)
+  })
 
-  assert.isArray(data)
-  assert.lengthOf(data, 10)
-})
+  test('ensure that a user can show his spot', async assert => {
+    const user = await UserFactory.makeStubbed()
+    const { name, latitude, longitude } = await SpotFactory.makeStubbed()
 
-test('ensure that a user can index all spots in range', async assert => {
-  const authentication = {
-    email: 'caiosfr13@gmail.com',
-    password: 'Ronaldo123',
-  }
+    const { firstName, lastName, email, password } = user
 
-  const {
-    body: { token },
-  } = await supertest(BASE_URL).post(`${authUrl}/signin`).send(authentication).expect(201)
+    const authentication = {
+      email,
+      password,
+    }
 
-  const {
-    body: { data },
-  } = await supertest(BASE_URL)
-    .get(`${spotsUrl}/index?latitude=1&longitude=1&distance=1&page=1`)
-    .set('Authorization', `Bearer ${token}`)
-    .expect(200)
+    const payload = {
+      name,
+      latitude,
+      longitude,
+    }
 
-  assert.isArray(data)
-  assert.lengthOf(data, 10)
-})
+    const assertion = {
+      first_name: firstName,
+      last_name: lastName,
+      email,
+    }
 
-test('ensure that a user can show his spot', async assert => {
-  const authentication = {
-    email: 'caiosfr13@gmail.com',
-    password: 'Ronaldo123',
-  }
+    await user.save()
+    const {
+      body: { token },
+    } = await supertest(BASE_URL).post(`${authUrl}/signin`).send(authentication).expect(201)
 
-  const assertion = {
-    email: 'caiosfr13@gmail.com',
-  }
+    const {
+      body: { external_id: spotId },
+    } = await supertest(BASE_URL)
+      .post(`${spotsUrl}/new`)
+      .send(payload)
+      .set('Authorization', `Bearer ${token}`)
+      .expect(201)
 
-  const {
-    body: { token },
-  } = await supertest(BASE_URL).post(`${authUrl}/signin`).send(authentication).expect(201)
+    const {
+      body: { user: response },
+    } = await supertest(BASE_URL)
+      .get(`${spotsUrl}/show/${spotId}`)
+      .set('Authorization', `Bearer ${token}`)
+      .expect(200)
 
-  const {
-    body: { user },
-  } = await supertest(BASE_URL)
-    .get(`${spotsUrl}/show/${spotId}`)
-    .set('Authorization', `Bearer ${token}`)
-    .expect(200)
+    assert.include(response, assertion)
+  })
 
-  assert.include(user, assertion)
-})
+  test('ensure that a user can update his spot', async assert => {
+    const user = await UserFactory.makeStubbed()
+    const { name, latitude, longitude } = await SpotFactory.makeStubbed()
 
-test('ensure that a user can update his spot', async assert => {
-  const authentication = {
-    email: 'caiosfr13@gmail.com',
-    password: 'Ronaldo123',
-  }
+    const { email, password } = user
 
-  const payload = {
-    name: 'Pagode da pressão',
-    latitude: 2,
-    longitude: 2,
-  }
+    const authentication = {
+      email,
+      password,
+    }
 
-  const {
-    body: { token },
-  } = await supertest(BASE_URL).post(`${authUrl}/signin`).send(authentication).expect(201)
+    const payload = {
+      name,
+      latitude,
+      longitude,
+    }
 
-  const { body } = await supertest(BASE_URL)
-    .put(`${spotsUrl}/show/${spotId}`)
-    .send(payload)
-    .set('Authorization', `Bearer ${token}`)
-    .expect(200)
+    await user.save()
+    const {
+      body: { token },
+    } = await supertest(BASE_URL).post(`${authUrl}/signin`).send(authentication).expect(201)
 
-  assert.include(body, payload)
+    const {
+      body: { external_id: spotId },
+    } = await supertest(BASE_URL)
+      .post(`${spotsUrl}/new`)
+      .send(payload)
+      .set('Authorization', `Bearer ${token}`)
+      .expect(201)
+
+    const { body } = await supertest(BASE_URL)
+      .put(`${spotsUrl}/show/${spotId}`)
+      .send(payload)
+      .set('Authorization', `Bearer ${token}`)
+      .expect(200)
+
+    assert.include(body, payload)
+  })
 })
