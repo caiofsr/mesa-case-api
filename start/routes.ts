@@ -7,6 +7,7 @@ Route.get('/', async () => {
 Route.group(() => {
   Route.post('/signup', 'AuthController.signUp')
   Route.post('/signin', 'AuthController.signIn')
+  Route.post('/logout', 'AuthController.logout').middleware('auth')
 }).prefix('v1/client/auth')
 
 Route.group(() => {
@@ -24,4 +25,12 @@ Route.group(() => {
   Route.post('/new/:id', 'RatingsController.store')
 })
   .prefix('v1/client/ratings')
+  .middleware('auth')
+
+Route.group(() => {
+  Route.get('/show/:id', 'UserController.show')
+  Route.put('/edit/:id', 'UserController.update')
+  Route.patch('/password/:id', 'UserController.updatePassword')
+})
+  .prefix('v1/client/profile')
   .middleware('auth')
