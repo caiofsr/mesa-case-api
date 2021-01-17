@@ -11,9 +11,7 @@ let spotId = ''
 test.group('Spots', () => {
   test('ensure a user authenticated create a new spot', async assert => {
     const user = await UserFactory.makeStubbed()
-    const {
-      $attributes: { name, latitude, longitude },
-    } = await SpotFactory.makeStubbed()
+    const { name, latitude, longitude } = await SpotFactory.makeStubbed()
 
     const { email, password } = user
 

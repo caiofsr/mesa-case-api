@@ -18,3 +18,10 @@ Route.group(() => {
 })
   .prefix('v1/client/spots')
   .middleware('auth')
+
+Route.group(() => {
+  Route.get('/show/:id', 'RatingsController.show')
+  Route.post('/new/:id', 'RatingsController.store')
+})
+  .prefix('v1/client/ratings')
+  .middleware('auth')

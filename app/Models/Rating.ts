@@ -21,7 +21,7 @@ export default class Rating extends BaseModel {
   public comment: string
 
   @column()
-  public rating: number
+  public rate: number
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime

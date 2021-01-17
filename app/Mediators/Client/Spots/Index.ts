@@ -15,7 +15,7 @@ const Index = async ({ own, list, distance, page, latitude, longitude }, auth: A
           .preload('user')
           .preload('ratings')
           .orderBy('name')
-          .paginate(page, limit)
+          .paginate(parseInt(page), limit)
 
         return { status: 200, data: spots }
       } else {
@@ -26,7 +26,7 @@ const Index = async ({ own, list, distance, page, latitude, longitude }, auth: A
           .apply(scopes =>
             scopes.nearby(parseFloat(latitude), parseFloat(longitude), parseInt(distance))
           )
-          .paginate(page, limit)
+          .paginate(parseInt(page), limit)
 
         return { status: 200, data: spots }
       }
@@ -36,7 +36,7 @@ const Index = async ({ own, list, distance, page, latitude, longitude }, auth: A
           .preload('user')
           .preload('ratings')
           .orderBy('name')
-          .paginate(page, limit)
+          .paginate(parseInt(page), limit)
         return { status: 200, data: spots }
       } else {
         const spots = await Spot.query()
@@ -45,7 +45,7 @@ const Index = async ({ own, list, distance, page, latitude, longitude }, auth: A
           .apply(scopes =>
             scopes.nearby(parseFloat(latitude), parseFloat(longitude), parseInt(distance))
           )
-          .paginate(page, limit)
+          .paginate(parseInt(page), limit)
 
         return { status: 200, data: spots }
       }

@@ -22,7 +22,7 @@ export default class Ratings extends BaseSchema {
         .onUpdate('CASCADE')
         .onDelete('CASCADE')
       table.text('comment').nullable()
-      table.enu('rating', [0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5]).notNullable()
+      table.enu('rate', [0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5]).notNullable()
       table.timestamps(true)
     })
   }

@@ -34,10 +34,13 @@ export const SpotFactory = Factory.define(Spot, ({ faker }) => {
 export const RatingFactory = Factory.define(Rating, ({ faker }) => {
   faker.locale = 'pt_BR'
   return {
-    rating: faker.random.number(5),
+    rate: faker.random.number(5),
     comment: faker.lorem.text(),
   }
 })
+  .before('makeStubbed', (_, model) => {
+    model.id = Math.floor(Math.random() * (100 - 50) + 50)
+  })
   .relation('user', () => UserFactory)
   .relation('spot', () => SpotFactory)
   .build()
