@@ -13,6 +13,13 @@ test.group('Auth', () => {
       password: 'Ronaldo123',
     }
 
+    const payload2 = {
+      firstName: 'Sheldon',
+      lastName: 'Ferrer',
+      email: 'sheldon@gmail.com',
+      password: 'Ronaldo123',
+    }
+
     const payloadAssert = {
       first_name: 'Caio',
       last_name: 'Fernando',
@@ -20,6 +27,7 @@ test.group('Auth', () => {
     }
 
     const { body } = await supertest(BASE_URL).post(`${authUrl}/signup`).send(payload).expect(201)
+    await supertest(BASE_URL).post(`${authUrl}/signup`).send(payload2).expect(201)
 
     assert.include(body, payloadAssert)
   })

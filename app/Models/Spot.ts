@@ -1,7 +1,18 @@
 import { DateTime } from 'luxon'
-import { BaseModel, beforeCreate, column, HasMany, hasMany } from '@ioc:Adonis/Lucid/Orm'
+import {
+  BaseModel,
+  beforeCreate,
+  BelongsTo,
+  belongsTo,
+  column,
+  HasMany,
+  hasMany,
+  scope,
+} from '@ioc:Adonis/Lucid/Orm'
 import { v4 as uuid } from 'uuid'
 import Rating from 'App/Models/Rating'
+import Database from '@ioc:Adonis/Lucid/Database'
+import User from './User'
 
 export default class Spot extends BaseModel {
   @column({ isPrimary: true, serializeAs: null })
@@ -33,6 +44,22 @@ export default class Spot extends BaseModel {
     spot.externalId = uuid()
   }
 
+  @belongsTo(() => User)
+  public user: BelongsTo<typeof User>
+
   @hasMany(() => Rating)
   public ratings: HasMany<typeof Rating>
+
+  public static nearby = scope((query, latitude, longitude, distance) => {
+    const haversine = `(6371 * acos(cos(radians(${latitude}))
+    * cos(radians(latitude))
+    * cos(radians(longitude)
+    - radians(${longitude}))
+    + sin(radians(${latitude}))
+    * sin(radians(latitude))))`
+
+    return query
+      .select('*', Database.raw(`${haversine} as distance`))
+      .whereRaw(`${haversine} < ${distance}`)
+  })
 }
