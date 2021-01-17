@@ -28,9 +28,9 @@ Route.group(() => {
   .middleware('auth')
 
 Route.group(() => {
-  Route.get('/show/:id', 'UserController.show')
-  Route.put('/edit/:id', 'UserController.update')
-  Route.patch('/password/:id', 'UserController.updatePassword')
+  Route.get('/show/:id', 'UsersController.show')
+  Route.put('/edit/:id', 'UsersController.update')
+  Route.patch('/password/:id', 'UsersController.updatePassword')
 })
   .prefix('v1/client/profile')
   .middleware('auth')
