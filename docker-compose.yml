@@ -1,0 +1,32 @@
+version: '3.9'
+
+services:
+  adonis-app:
+    container_name: Adonis
+    build: .
+    ports:
+      - '3333:3333'
+    volumes:
+      - .:/home/node/app
+      - /home/node/app/node_modules
+    networks:
+      - default
+    links:
+      - postgresql-app
+    depends_on:
+      - postgresql-app
+
+  postgresql-app:
+    container_name: Postgres
+    restart: always
+    image: postgres:alpine
+    ports:
+      - '5432:5432'
+    volumes:
+      - .docker/db:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: docker
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_DB: mesa
+    networks:
+      - default
