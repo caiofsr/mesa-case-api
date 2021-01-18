@@ -9,8 +9,7 @@ services:
     volumes:
       - .:/home/node/app
       - /home/node/app/node_modules
-    networks:
-      - default
+      - .docker/db:/var/lib/postgresql/data
     links:
       - postgresql-app
     depends_on:
@@ -28,5 +27,3 @@ services:
       POSTGRES_USER: docker
       POSTGRES_PASSWORD: 123456
       POSTGRES_DB: mesa
-    networks:
-      - default
