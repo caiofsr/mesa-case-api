@@ -1,18 +1,25 @@
 import { AuthContract } from '@ioc:Adonis/Addons/Auth'
 import User from 'App/Models/User'
 
-const Update = async ({ firstName, lastName, email }, externalId: string, auth: AuthContract) => {
+const Update = async (
+  { firstName, lastName, email, oldPassword, newPassword },
+  externalId: string,
+  auth: AuthContract
+) => {
   try {
-    const { id } = auth.user?.$attributes as { id: number }
-    const user = await User.findBy('external_id', externalId)
+    const user = (await User.findBy('external_id', externalId)) as User
+    const { email: oldEmail } = await auth.authenticate()
 
-    if (user?.id === id) {
-      if (firstName) user.firstName = firstName
-      if (lastName) user.lastName = lastName
-      if (email) user.email = email
-
-      await user.save()
+    if (oldPassword) {
+      await auth.attempt(oldEmail, oldPassword)
+      user.password = newPassword
     }
+
+    if (firstName) user.firstName = firstName
+    if (lastName) user.lastName = lastName
+    if (email) user.email = email
+
+    await user.save()
 
     return { status: 200, data: user }
   } catch (error) {

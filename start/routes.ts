@@ -30,7 +30,6 @@ Route.group(() => {
 Route.group(() => {
   Route.get('/show/:id', 'UsersController.show')
   Route.put('/edit/:id', 'UsersController.update')
-  Route.patch('/password/:id', 'UsersController.updatePassword')
 })
   .prefix('v1/client/profile')
   .middleware('auth')

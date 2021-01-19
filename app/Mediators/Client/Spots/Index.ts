@@ -3,10 +3,12 @@ import { AuthContract } from '@ioc:Adonis/Addons/Auth'
 
 import Spot from 'App/Models/Spot'
 
-const Index = async ({ own, list, distance, page, latitude, longitude }, auth: AuthContract) => {
+const Index = async (
+  { own, list, distance, page, latitude, longitude, limit },
+  auth: AuthContract
+) => {
   try {
     const { id } = auth.user?.$attributes as { id: number }
-    const limit = 10
 
     if (own === 'true') {
       if (list === 'true') {
@@ -26,7 +28,7 @@ const Index = async ({ own, list, distance, page, latitude, longitude }, auth: A
           .apply(scopes =>
             scopes.nearby(parseFloat(latitude), parseFloat(longitude), parseInt(distance))
           )
-          .paginate(parseInt(page), limit)
+          .paginate(parseInt(page), parseInt(limit))
 
         return { status: 200, data: spots }
       }

@@ -1,14 +1,14 @@
 import Rating from 'App/Models/Rating'
 import Spot from 'App/Models/Spot'
 
-const Show = async (externalId: string, { page }) => {
+const Show = async (externalId: string, { page, limit }) => {
   try {
     const { id: spotId } = await Spot.query().where('external_id', externalId).firstOrFail()
 
     const spots = await Rating.query()
       .where('spot_id', spotId)
       .preload('user')
-      .paginate(parseInt(page), 10)
+      .paginate(parseInt(page), parseInt(limit))
 
     return { status: 200, data: spots }
   } catch (error) {

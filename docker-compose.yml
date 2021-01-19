@@ -8,7 +8,7 @@ services:
       - '3333:3333'
     volumes:
       - .:/home/node/app
-      - /home/node/app/node_modules
+      - ./node_modules/home/node/app/node_modules
       - .docker/db:/var/lib/postgresql/data
     links:
       - postgresql-app
