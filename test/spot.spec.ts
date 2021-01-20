@@ -6,7 +6,6 @@ import { UserFactory, SpotFactory } from 'Database/factories'
 const BASE_URL = `http://${process.env.HOST}:${process.env.PORT}`
 const spotsUrl = '/v1/client/spots'
 const authUrl = '/v1/client/auth'
-let spotId = ''
 
 test.group('Spots', () => {
   test('ensure a user authenticated create a new spot', async assert => {
@@ -33,7 +32,7 @@ test.group('Spots', () => {
     } = await supertest(BASE_URL).post(`${authUrl}/signin`).send(authentication).expect(201)
 
     const { body } = await supertest(BASE_URL)
-      .post(`${spotsUrl}/new`)
+      .post(`${spotsUrl}`)
       .set('Authorization', `Bearer ${token}`)
       .send(payload)
       .expect(201)
@@ -62,7 +61,7 @@ test.group('Spots', () => {
     const {
       body: { data },
     } = await supertest(BASE_URL)
-      .get(`${spotsUrl}/index?list=true&page=1`)
+      .get(`${spotsUrl}?list=true&page=1&limit=10`)
       .set('Authorization', `Bearer ${token}`)
       .expect(200)
 
@@ -91,7 +90,7 @@ test.group('Spots', () => {
     const {
       body: { data },
     } = await supertest(BASE_URL)
-      .get(`${spotsUrl}/index?latitude=${latitude}&longitude=${longitude}&distance=1&page=1`)
+      .get(`${spotsUrl}?latitude=${latitude}&longitude=${longitude}&distance=1&page=1&limit=10`)
       .set('Authorization', `Bearer ${token}`)
       .expect(200)
 
@@ -129,7 +128,7 @@ test.group('Spots', () => {
     const {
       body: { external_id: spotId },
     } = await supertest(BASE_URL)
-      .post(`${spotsUrl}/new`)
+      .post(`${spotsUrl}`)
       .send(payload)
       .set('Authorization', `Bearer ${token}`)
       .expect(201)
@@ -137,7 +136,7 @@ test.group('Spots', () => {
     const {
       body: { user: response },
     } = await supertest(BASE_URL)
-      .get(`${spotsUrl}/show/${spotId}`)
+      .get(`${spotsUrl}/${spotId}`)
       .set('Authorization', `Bearer ${token}`)
       .expect(200)
 
@@ -169,13 +168,13 @@ test.group('Spots', () => {
     const {
       body: { external_id: spotId },
     } = await supertest(BASE_URL)
-      .post(`${spotsUrl}/new`)
+      .post(`${spotsUrl}`)
       .send(payload)
       .set('Authorization', `Bearer ${token}`)
       .expect(201)
 
     const { body } = await supertest(BASE_URL)
-      .put(`${spotsUrl}/show/${spotId}`)
+      .put(`${spotsUrl}/${spotId}`)
       .send(payload)
       .set('Authorization', `Bearer ${token}`)
       .expect(200)

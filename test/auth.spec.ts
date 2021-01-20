@@ -7,22 +7,6 @@ const BASE_URL = `http://${process.env.HOST}:${process.env.PORT}`
 const authUrl = '/v1/client/auth'
 
 test.group('Auth', () => {
-  test('ensure that creates a new user', async assert => {
-    const { firstName, lastName, email, password } = await UserFactory.makeStubbed()
-
-    const payload = { firstName, lastName, email, password }
-
-    const payloadAssert = {
-      first_name: firstName,
-      last_name: lastName,
-      email,
-    }
-
-    const { body } = await supertest(BASE_URL).post(`${authUrl}/signup`).send(payload).expect(201)
-
-    assert.include(body, payloadAssert)
-  })
-
   test('ensure that return a access token for a authenticated user', async assert => {
     const user = await UserFactory.makeStubbed()
 
@@ -40,7 +24,7 @@ test.group('Auth', () => {
     assert.include(body, { type: 'bearer' })
   })
 
-  test("ensure that a user logged out can't access the system", async assert => {
+  test("ensure that a user logged out can't access the system", async () => {
     const user = await UserFactory.makeStubbed()
 
     const { email, password } = user

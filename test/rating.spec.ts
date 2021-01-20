@@ -32,7 +32,7 @@ test.group('Ratings', () => {
     } = await supertest(BASE_URL).post(`${authUrl}/signin`).send(authentication).expect(201)
 
     const { body } = await supertest(BASE_URL)
-      .post(`${ratingsUrl}/new/${externalId}`)
+      .post(`${ratingsUrl}/${externalId}`)
       .set('Authorization', `Bearer ${token}`)
       .send(payload)
       .expect(201)
@@ -60,7 +60,7 @@ test.group('Ratings', () => {
     const {
       body: { data },
     } = await supertest(BASE_URL)
-      .get(`${ratingsUrl}/show/${externalId}?page=1`)
+      .get(`${ratingsUrl}/${externalId}?page=1&limit=10`)
       .set('Authorization', `Bearer ${token}`)
       .expect(200)
 
