@@ -135,6 +135,7 @@ No response body<br><br>
 #### Query params accepted
     - list = true or nothing (response in alphabetic order)
     - own = true or nothing (response with his own spots registered)
+    - distance = number to search in area. In kilometers
     - latitude = number corresponding the latitude (response per range) *
     - longitude = number corresponding the longitude (response per range) *
     - page = number for the page
