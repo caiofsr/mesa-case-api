@@ -1,12 +1,10 @@
-FROM node:alpine
+FROM node:latest
 
 RUN mkdir -p /home/node/app/node_modules
 
 WORKDIR /home/node/app
 
 COPY package.json yarn.lock ./
-
-RUN apk add --no-cache git
 
 COPY . /home/node/app/
 

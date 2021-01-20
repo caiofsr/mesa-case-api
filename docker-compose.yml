@@ -8,8 +8,7 @@ services:
       - '3333:3333'
     volumes:
       - .:/home/node/app
-      - ./node_modules/home/node/app/node_modules
-      - .docker/db:/var/lib/postgresql/data
+      - ./node_modules:/home/node/app/node_modules
     links:
       - postgresql-app
     depends_on:
@@ -18,11 +17,9 @@ services:
   postgresql-app:
     container_name: Postgres
     restart: always
-    image: postgres:alpine
+    image: postgres:latest
     ports:
       - '5432:5432'
-    volumes:
-      - .docker/db:/var/lib/postgresql/data
     environment:
       POSTGRES_USER: docker
       POSTGRES_PASSWORD: 123456

@@ -23,6 +23,7 @@ const Update = async (
 
     return { status: 200, data: user }
   } catch (error) {
+    console.log(error)
     return { status: 400, data: { error: "Couldn't update user" } }
   }
 }
