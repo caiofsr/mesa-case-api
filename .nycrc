@@ -1,0 +1,14 @@
+{
+  "extends": "@istanbuljs/nyc-config-typescript",
+  "all": true,
+  "check-coverage": true,
+  "exclude": [
+    "database/seeders/**/*.ts",
+    "coverage/**/*",
+    "contracts/**/*",
+    "commands/**/*",
+    "config/**/*",
+    "app/Middleware/**/*",
+    "server.ts"
+  ]
+}

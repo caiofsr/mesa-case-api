@@ -12,10 +12,13 @@
     "lint": "eslint . --ext=.ts",
     "format": "prettier --write .",
     "test": "node -r @adonisjs/assembler/build/register japaFile.ts",
-    "migration": "cd build && node ace migration:run"
+    "test:cover": "nyc node -r @adonisjs/assembler/build/register japaFile.ts",
+    "test:report": "nyc report --reporter=lcov",
+    "migration:prod": "cd build && node ace migration:run"
   },
   "devDependencies": {
     "@adonisjs/assembler": "^3.0.0",
+    "@istanbuljs/nyc-config-typescript": "^1.0.1",
     "@types/supertest": "^2.0.10",
     "@types/uuid": "^8.3.0",
     "adonis-preset-ts": "^1.1.0",
@@ -26,6 +29,7 @@
     "execa": "^5.0.0",
     "get-port": "^5.1.1",
     "japa": "^3.1.1",
+    "nyc": "^15.1.0",
     "pino-pretty": "^4.3.0",
     "prettier": "^2.2.1",
     "supertest": "^6.1.0",

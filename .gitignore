@@ -7,3 +7,4 @@ coverage
 tmp
 .nyc_output
 .docker
+yarn-*.log
