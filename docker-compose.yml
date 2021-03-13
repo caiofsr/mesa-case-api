@@ -16,7 +16,6 @@ services:
 
   postgresql-app:
     container_name: Postgres
-    restart: always
     image: postgres:latest
     ports:
       - '5432:5432'

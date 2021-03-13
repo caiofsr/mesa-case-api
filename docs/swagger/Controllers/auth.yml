@@ -1,0 +1,62 @@
+/v1/client/auth/signin:
+  post:
+    tags:
+      - Auth
+    security: []
+    description: Login
+    parameters:
+      - name: credentials
+        in:  body
+        required: true
+        schema:
+          properties:
+            email:
+              type: string
+              example: 'email@example.com'
+              required: true
+            password:
+              type: string
+              required: true
+    produces:
+      - application/json
+    responses:
+      200:
+        description: Success
+      400:
+        description: Invalid credentials
+
+/v1/client/profile/:
+  post:
+    tags:
+      - Auth
+    security: []
+    description: Login
+    parameters:
+      - name: credentials
+        in:  body
+        required: true
+        schema:
+          properties:
+            firstName:
+              type: string
+              example: 'Antônio'
+              required: true
+            lastName:
+              type: string
+              example: 'Banderas'
+              required: true
+            email:
+              type: string
+              example: 'email@example.com'
+              required: true
+            password:
+              type: string
+              required: true
+    produces:
+      - application/json
+    responses:
+      201:
+        description: Created
+      400:
+        description: Invalid credentials
+

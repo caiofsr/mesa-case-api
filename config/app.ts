@@ -5,6 +5,7 @@
  * file.
  */
 
+import pino from 'pino'
 import proxyAddr from 'proxy-addr'
 import Env from '@ioc:Adonis/Core/Env'
 import { ServerConfig } from '@ioc:Adonis/Core/Server'
@@ -135,6 +136,8 @@ export const http: ServerConfig = {
 |--------------------------------------------------------------------------
 */
 export const logger: LoggerConfig = {
+  timestamp: pino.stdTimeFunctions.isoTime,
+
   /*
   |--------------------------------------------------------------------------
   | Application name
