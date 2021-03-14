@@ -6,5 +6,3 @@ release:
     - ./migration.sh
 run:
   web: yarn start
-  config:
-    ENV_SILENT: true
