@@ -1,8 +1,9 @@
 build:
   docker:
-    web: Dockerfile
+    web: DockerfileProd
 release:
   command:
     - ./migration.sh
+  image: worker
 run:
   web: yarn start
