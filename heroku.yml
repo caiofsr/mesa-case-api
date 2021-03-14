@@ -1,3 +1,10 @@
 build:
   docker:
     web: Dockerfile
+release:
+  command:
+    - ./migration.sh
+run:
+  web: yarn start
+  config:
+    ENV_SILENT: true
