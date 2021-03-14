@@ -15,4 +15,3 @@ jobs:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "mesa-case"
           heroku_email: "mr.kaka77@gmail.com"
-          usedocker: true
